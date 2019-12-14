@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -38,14 +39,27 @@ namespace FileViewer
             if (openFileDialog.ShowDialog() == true)
             {
                 file = openFileDialog;
-                lines = File.ReadLines(file.FileName);
-                txtEditor.Text = String.Join("\n", lines);
+                try
+                {
+                    lines = File.ReadLines(file.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Read error");
+                }
+                PrintText(lines);
             }
+        }
+
+        private void PrintText(IEnumerable<string> array)
+        {
+            txtEditor.Text = string.Join("\n", array);
+            this.Title = new FileInfo(file.FileName).FullName;
         }
 
         private void txtEditor_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            
         }
 
         private async void btnApply_Click(object sender, RoutedEventArgs e)
@@ -59,7 +73,7 @@ namespace FileViewer
                 catch (Exception ex)
                 {
 
-                    MessageBox.Show(ex.Message, "File error");
+                    MessageBox.Show(ex.Message, "Filter error");
                 }
             }
             else
@@ -70,14 +84,15 @@ namespace FileViewer
 
         private async Task ApplyFilter()
         {
+            string op1 = textOption1.Text, op2 = textOption2.Text, op3 = textOption3.Text, op4 = textOption4.Text;
             try
             {
-                var sort = from str in lines where (str.Contains(textOption1.Text) || (textOption2.Text.Length == 0 ? false : str.Contains(textOption2.Text))) && (str.Contains(textOption3.Text) || (textOption4.Text.Length == 0 ? false : str.Contains(textOption4.Text))) select str;
-                txtEditor.Text = string.Join("\n", sort);
+                var sort = from str in lines where (str.Contains(op1) || (op2.Length == 0 ? false : str.Contains(op2))) && (str.Contains(op3) || (op4.Length == 0 ? false : str.Contains(op4))) select str;
+                PrintText(sort);
             }
-            catch
+            catch(Exception ex)
             {
-                throw new ApplicationException("File read access is denied");
+                throw ex;
             }
             await Task.FromResult<object>(null);
         }
