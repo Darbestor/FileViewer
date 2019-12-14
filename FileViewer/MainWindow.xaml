@@ -17,9 +17,41 @@
                 <RowDefinition Height="6" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <!--First row-->
             <Button x:Name="btnOpenFile" Grid.Row="0" Grid.Column="0" Background="#FF2D78B6" Height="20" VerticalAlignment="Top" Foreground="White" Click="btnFile_Click">Файл</Button>
-            <Button x:Name="btnApply" Grid.Row="2" Grid.Column="1" Background="#FF2D78B6" Foreground="White" Click="btnApply_Click">Применить</Button>
+            <ComboBox Name="option1" Grid.Row="0" Grid.Column="1">
+                <!--<ComboBoxItem>ИЛИ</ComboBoxItem>-->
+                <ComboBoxItem IsSelected="True">И</ComboBoxItem>
+            </ComboBox>
+            <TextBox x:Name="textOption1" Grid.Row="0" Grid.Column="2" Width="100"/>
+            <ComboBox Name="option2" Grid.Row="0" Grid.Column="3">
+                <ComboBoxItem IsSelected="True">ИЛИ</ComboBoxItem>
+                <!--<ComboBoxItem>И</ComboBoxItem>-->
+            </ComboBox>
+            <TextBox x:Name="textOption2" Grid.Row="0" Grid.Column="4" Width="100"/>
+            <!--Second row-->
+            <Button x:Name="btnApply" Grid.Row="2" Grid.Column="0" Background="#FF2D78B6" Foreground="White" Click="btnApply_Click">Применить</Button>
+            <ComboBox Name="option3" Grid.Row="2" Grid.Column="1">
+                <!--<ComboBoxItem>ИЛИ</ComboBoxItem>-->
+                <ComboBoxItem  IsSelected="True">И</ComboBoxItem>
+            </ComboBox>
+            <TextBox x:Name="textOption3" Grid.Row="2" Grid.Column="2" Width="100"/>
+            <ComboBox Name="option4" Grid.Row="2" Grid.Column="3">
+                <ComboBoxItem IsSelected="True">ИЛИ</ComboBoxItem>
+                <!--<ComboBoxItem>И</ComboBoxItem>-->
+            </ComboBox>
+            <TextBox x:Name="textOption4" Grid.Row="2" Grid.Column="4" Width="100"/>
         </Grid>
         <TextBox x:Name="txtEditor" Grid.Row="2" Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
     </Grid>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding SaveCommand}" Modifiers="Control" Key="S"/>
+    </Window.InputBindings>
 </Window>
