@@ -49,7 +49,20 @@
             </ComboBox>
             <TextBox x:Name="textOption4" Grid.Row="2" Grid.Column="4" Width="100"/>
         </Grid>
-        <TextBox x:Name="txtEditor" Grid.Row="2" Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+        <!--<TextBox x:Name="txtEditor" Grid.Row="2" Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>-->
+        <RichTextBox x:Name="docBox" Grid.Row="2" Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollViewer.ScrollChanged="docBox_ScrollChanged" TextChanged="docBox_TextChanged">
+            <FlowDocument>
+                <FlowDocument.Resources>
+                    <!-- This style is used to set the margins for all paragraphs in the FlowDocument to 0. -->
+                    <Style TargetType="{x:Type Paragraph}">
+                        <Setter Property="Margin" Value="0"/>
+                    </Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Margin" Value="0"/>
+                    </Style>
+                </FlowDocument.Resources>
+            </FlowDocument>
+        </RichTextBox>
     </Grid>
     <Window.InputBindings>
         <KeyBinding Command="{Binding SaveCommand}" Modifiers="Control" Key="S"/>

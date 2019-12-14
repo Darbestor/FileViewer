@@ -25,36 +25,68 @@ namespace FileViewer
     {
         OpenFileDialog file;
         IEnumerable<string> lines;
+        IEnumerator<string> enumerator;
+        bool canIterate;
 
         public MainWindow()
         {
             InitializeComponent();
             file = null;
             lines = null;
+            enumerator = null;
+            canIterate = false;
         }
 
         private void btnFile_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text Files (*.txt)|*.txt|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
                 file = openFileDialog;
+                this.Title = new FileInfo(file.FileName).FullName;
                 try
                 {
                     lines = File.ReadLines(file.FileName);
+                    SetFirstBlock();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Read error");
                 }
-                PrintText(lines);
             }
         }
 
-        private void PrintText(IEnumerable<string> array)
+        private void SetFirstBlock()
         {
-            txtEditor.Text = string.Join("\n", array);
-            this.Title = new FileInfo(file.FileName).FullName;
+            enumerator = lines.GetEnumerator();
+            docBox.Document.Blocks.Clear();
+            docBox.ScrollToVerticalOffset(0);
+            canIterate = true;
+            AddTextBlock();
+        }
+
+        private void AddTextBlock()
+        {
+            Paragraph paragraph = new Paragraph();
+            StringBuilder str = new StringBuilder();
+            int numOfLines = (int)(docBox.ActualHeight / FontSize / FontFamily.LineSpacing) + 1;
+            while (numOfLines > 0)
+            {
+                if (enumerator.MoveNext())
+                {
+                    str.AppendLine(enumerator.Current);
+                    numOfLines--;
+                }
+                else
+                {
+                    canIterate = false;
+                    break;
+                }
+            }
+            str.Remove(str.Length - 2, 2);
+            paragraph.Inlines.Add(str.ToString());
+            docBox.Document.Blocks.Add(paragraph);
         }
 
         private void txtEditor_TextChanged(object sender, TextChangedEventArgs e)
@@ -87,14 +119,30 @@ namespace FileViewer
             string op1 = textOption1.Text, op2 = textOption2.Text, op3 = textOption3.Text, op4 = textOption4.Text;
             try
             {
-                var sort = from str in lines where (str.Contains(op1) || (op2.Length == 0 ? false : str.Contains(op2))) && (str.Contains(op3) || (op4.Length == 0 ? false : str.Contains(op4))) select str;
-                PrintText(sort);
+                lines = from str in File.ReadLines(file.FileName) where (str.Contains(op1) || (op2.Length == 0 ? false : str.Contains(op2))) && (str.Contains(op3) || (op4.Length == 0 ? false : str.Contains(op4))) select str;
+                SetFirstBlock();
             }
             catch(Exception ex)
             {
                 throw ex;
             }
             await Task.FromResult<object>(null);
+        }
+
+        private void docBox_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (e.VerticalChange > 0 && canIterate)
+            {
+                if (e.VerticalOffset + e.ViewportHeight == e.ExtentHeight)
+                {
+                    AddTextBlock();
+                }
+            }
+        }
+
+        private void docBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }
