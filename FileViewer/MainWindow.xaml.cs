@@ -22,21 +22,44 @@ namespace FileViewer
     /// </summary>
     public partial class MainWindow : Window
     {
+        OpenFileDialog file;
+
         public MainWindow()
         {
             InitializeComponent();
+            file = null;
         }
 
         private void btnFile_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
-                txtEditor.Text = File.ReadAllText(openFileDialog.FileName);
+                file = openFileDialog;
         }
 
         private void txtEditor_TextChanged(object sender, TextChangedEventArgs e)
         {
 
+        }
+
+        private async void btnApply_Click(object sender, RoutedEventArgs e)
+        {
+            if (file != null)
+            {
+                await ReadFile(file.FileName);
+            }
+            else
+            {
+                MessageBox.Show("Select file first.", "File error");
+            }
+        }
+
+        private async Task ReadFile(string fileName)
+        {
+            using (var text = File.OpenText(fileName))
+            {
+                txtEditor.Text = await text.ReadToEndAsync();
+            }
         }
     }
 }

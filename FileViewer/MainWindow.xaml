@@ -18,7 +18,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Button x:Name="btnOpenFile" Grid.Row="0" Grid.Column="0" Background="#FF2D78B6" Height="20" VerticalAlignment="Top" Foreground="White" Click="btnFile_Click">Файл</Button>
-            <Button x:Name="btnApply" Grid.Row="2" Grid.Column="1" Background="#FF2D78B6" Foreground="White">Применить</Button>
+            <Button x:Name="btnApply" Grid.Row="2" Grid.Column="1" Background="#FF2D78B6" Foreground="White" Click="btnApply_Click">Применить</Button>
         </Grid>
         <TextBox x:Name="txtEditor" Grid.Row="2" Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
     </Grid>
