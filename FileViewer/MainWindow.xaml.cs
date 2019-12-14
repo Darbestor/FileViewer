@@ -84,7 +84,7 @@ namespace FileViewer
                     break;
                 }
             }
-            str.Remove(str.Length - 2, 2);
+            if (str.Length > 2) str.Remove(str.Length - 2, 2);
             paragraph.Inlines.Add(str.ToString());
             docBox.Document.Blocks.Add(paragraph);
         }
