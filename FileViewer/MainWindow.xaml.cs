@@ -35,10 +35,12 @@ namespace FileViewer
             lines = null;
             enumerator = null;
             canIterate = false;
+            // Handlers for drag and Drop
             docBox.AddHandler(RichTextBox.DragOverEvent, new DragEventHandler(RichTextBox_DragOver), true);
             docBox.AddHandler(RichTextBox.DropEvent, new DragEventHandler(RichTextBox_Drop), true);
         }
 
+        // Open file and reads all lines
         private void btnFile_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -59,6 +61,7 @@ namespace FileViewer
             }
         }
 
+        // Initial block
         private void SetFirstBlock()
         {
             enumerator = lines.GetEnumerator();
@@ -68,6 +71,8 @@ namespace FileViewer
             AddTextBlock();
         }
 
+        // Calculates how many strings can be displayed in textBox
+        // And loads new text block to RichTextBox
         private void AddTextBlock()
         {
             Paragraph paragraph = new Paragraph();
@@ -91,11 +96,6 @@ namespace FileViewer
             docBox.Document.Blocks.Add(paragraph);
         }
 
-        private void txtEditor_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            
-        }
-
         private async void btnApply_Click(object sender, RoutedEventArgs e)
         {
             if (file != null)
@@ -116,6 +116,7 @@ namespace FileViewer
             }
         }
 
+        // If specified "И" but not specified "ИЛИ" then looking substrings with "И" only
         private async Task ApplyFilter()
         {
             string op1 = textOption1.Text, op2 = textOption2.Text, op3 = textOption3.Text, op4 = textOption4.Text;
@@ -131,6 +132,7 @@ namespace FileViewer
             await Task.FromResult<object>(null);
         }
 
+        // Detects end of vertical scroll and loads new block of text 
         private void docBox_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if (e.VerticalChange > 0 && canIterate)
@@ -147,6 +149,7 @@ namespace FileViewer
 
         }
 
+        #region Drag and Drop
         private void RichTextBox_DragOver(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -181,5 +184,6 @@ namespace FileViewer
                 }
             }
         }
+        #endregion
     }
 }

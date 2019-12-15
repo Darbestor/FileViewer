@@ -26,38 +26,42 @@
             </Grid.ColumnDefinitions>
             <!--First row-->
             <Button x:Name="btnOpenFile" Grid.Row="0" Grid.Column="0" Background="#FF2D78B6" Height="20" VerticalAlignment="Top" Foreground="White" Click="btnFile_Click">Файл</Button>
-            <ComboBox Name="option1" Grid.Row="0" Grid.Column="1">
-                <!--<ComboBoxItem>ИЛИ</ComboBoxItem>-->
+            <ComboBox Name="option1" Grid.Row="0" Grid.Column="1" BorderBrush="#FF2D78B6">
+                <ComboBox.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </ComboBox.Background>
                 <ComboBoxItem IsSelected="True">И</ComboBoxItem>
             </ComboBox>
             <TextBox x:Name="textOption1" Grid.Row="0" Grid.Column="2" Width="100"/>
             <ComboBox Name="option2" Grid.Row="0" Grid.Column="3">
                 <ComboBoxItem IsSelected="True">ИЛИ</ComboBoxItem>
-                <!--<ComboBoxItem>И</ComboBoxItem>-->
             </ComboBox>
             <TextBox x:Name="textOption2" Grid.Row="0" Grid.Column="4" Width="100"/>
             <!--Second row-->
             <Button x:Name="btnApply" Grid.Row="2" Grid.Column="0" Background="#FF2D78B6" Foreground="White" Click="btnApply_Click">Применить</Button>
             <ComboBox Name="option3" Grid.Row="2" Grid.Column="1">
-                <!--<ComboBoxItem>ИЛИ</ComboBoxItem>-->
                 <ComboBoxItem  IsSelected="True">И</ComboBoxItem>
             </ComboBox>
             <TextBox x:Name="textOption3" Grid.Row="2" Grid.Column="2" Width="100"/>
-            <ComboBox Name="option4" Grid.Row="2" Grid.Column="3">
+            <ComboBox Name="option4" Grid.Row="2" Grid.Column="3" BorderBrush="White" Foreground="Black" Margin="0">
+                <ComboBox.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </ComboBox.Background>
                 <ComboBoxItem IsSelected="True">ИЛИ</ComboBoxItem>
-                <!--<ComboBoxItem>И</ComboBoxItem>-->
             </ComboBox>
             <TextBox x:Name="textOption4" Grid.Row="2" Grid.Column="4" Width="100"/>
         </Grid>
-        <!--<TextBox x:Name="txtEditor" Grid.Row="2" Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>-->
         <RichTextBox x:Name="docBox" AllowDrop="True" Grid.Row="2" Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollViewer.ScrollChanged="docBox_ScrollChanged" TextChanged="docBox_TextChanged">
             <FlowDocument>
                 <FlowDocument.Resources>
                     <!-- This style is used to set the margins for all paragraphs in the FlowDocument to 0. -->
                     <Style TargetType="{x:Type Paragraph}">
-                        <Setter Property="Margin" Value="0"/>
-                    </Style>
-                    <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="Margin" Value="0"/>
                     </Style>
                 </FlowDocument.Resources>
