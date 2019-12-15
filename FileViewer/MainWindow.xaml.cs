@@ -48,7 +48,6 @@ namespace FileViewer
             if (openFileDialog.ShowDialog() == true)
             {
                 file = openFileDialog.FileName;
-                this.Title = new FileInfo(file).FullName;
                 try
                 {
                     lines = File.ReadLines(file);
@@ -68,6 +67,7 @@ namespace FileViewer
             docBox.Document.Blocks.Clear();
             docBox.ScrollToVerticalOffset(0);
             canIterate = true;
+            this.Title = new FileInfo(file).FullName;
             AddTextBlock();
         }
 
