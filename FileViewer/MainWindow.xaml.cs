@@ -23,7 +23,7 @@ namespace FileViewer
     /// </summary>
     public partial class MainWindow : Window
     {
-        OpenFileDialog file;
+        string file;
         IEnumerable<string> lines;
         IEnumerator<string> enumerator;
         bool canIterate;
@@ -35,6 +35,8 @@ namespace FileViewer
             lines = null;
             enumerator = null;
             canIterate = false;
+            docBox.AddHandler(RichTextBox.DragOverEvent, new DragEventHandler(RichTextBox_DragOver), true);
+            docBox.AddHandler(RichTextBox.DropEvent, new DragEventHandler(RichTextBox_Drop), true);
         }
 
         private void btnFile_Click(object sender, RoutedEventArgs e)
@@ -43,11 +45,11 @@ namespace FileViewer
             openFileDialog.Filter = "Text Files (*.txt)|*.txt|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
-                file = openFileDialog;
-                this.Title = new FileInfo(file.FileName).FullName;
+                file = openFileDialog.FileName;
+                this.Title = new FileInfo(file).FullName;
                 try
                 {
-                    lines = File.ReadLines(file.FileName);
+                    lines = File.ReadLines(file);
                     SetFirstBlock();
                 }
                 catch (Exception ex)
@@ -119,7 +121,7 @@ namespace FileViewer
             string op1 = textOption1.Text, op2 = textOption2.Text, op3 = textOption3.Text, op4 = textOption4.Text;
             try
             {
-                lines = from str in File.ReadLines(file.FileName) where (str.Contains(op1) || (op2.Length == 0 ? false : str.Contains(op2))) && (str.Contains(op3) || (op4.Length == 0 ? false : str.Contains(op4))) select str;
+                lines = from str in File.ReadLines(file) where (str.Contains(op1) || (op2.Length == 0 ? false : str.Contains(op2))) && (str.Contains(op3) || (op4.Length == 0 ? false : str.Contains(op4))) select str;
                 SetFirstBlock();
             }
             catch(Exception ex)
@@ -143,6 +145,41 @@ namespace FileViewer
         private void docBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
+        }
+
+        private void RichTextBox_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.All;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+            e.Handled = false;
+        }
+
+        private void RichTextBox_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] docPath = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (System.IO.File.Exists(docPath[0]))
+                {
+                    try
+                    {
+                        file = docPath[0];
+                        // Open the document in the RichTextBox.
+                        lines = File.ReadLines(docPath[0]);
+                        SetFirstBlock();
+                    }
+                    catch (System.Exception)
+                    {
+                        MessageBox.Show("File could not be opened. Make sure the file is a text file.");
+                    }
+                }
+            }
         }
     }
 }
